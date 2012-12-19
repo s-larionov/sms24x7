@@ -68,10 +68,14 @@ class Sms24x7 {
 		if ($this->isAuthenticated()) {
 			$parameters['sid'] = $this->getSid();
 		} else {
-			$parameters = array_merge($parameters, $this->getConfig(['email', 'password']));
+			$parameters = array_merge($this->getConfig(['email', 'password']), $parameters);
 		}
 
-		return array_merge([], $parameters);
+		if ($translationId = $this->getConfig('translation_id')) {
+			$parameters['translation_id'] = $translationId;
+		}
+
+		return $parameters;
 	}
 
 	protected function request($method, array $parameters = []) {
